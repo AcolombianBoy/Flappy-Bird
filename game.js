@@ -7,12 +7,15 @@ restartButton.innerText = "Reiniciar";
 restartButton.style.display = "none";
 document.body.appendChild(restartButton);
 
+import { showScoreForm } from "./modulo.js";
+
 let bird = { x: 50, y: 250, radius: 15, gravity: 1.2, lift: -12, velocity: 0 };
 let pipes = [];
 let score = 0;
 let gameOver = false;
 let gameStarted = false;
 let gameInterval;
+let frames = 0; 
 const FPS = 60;
 
 function drawBird() {
@@ -35,6 +38,7 @@ function updateGame() {
     if (gameOver) {
         clearInterval(gameInterval);
         restartButton.style.display = "block";
+        showScoreForm(score); // Llamamos a la función para guardar puntuación
         return;
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,6 +99,4 @@ restartButton.addEventListener("click", function() {
     restartButton.style.display = "none";
     gameInterval = setInterval(updateGame, 1000 / FPS);
 });
-
-let frames = 0;
 

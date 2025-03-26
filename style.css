@@ -1,6 +1,12 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { text-align: center; background-color: skyblue; }
-canvas { background-color: lightgreen; display: block; margin: auto; }
+* { 
+    margin: 0; padding: 0; box-sizing: border-box; 
+}
+body { 
+    text-align: center; background-color: skyblue; 
+}
+canvas { 
+    background-color: lightgreen; display: block; margin: auto; 
+}
 #startScreen {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;

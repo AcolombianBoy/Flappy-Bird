@@ -21,19 +21,27 @@ async function addScore(player, score) {
     try {
         await addDoc(collection(db, "scores"), { player, score });
         console.log("Puntuación añadida");
+        displayScores(); // Actualiza la tabla de puntuaciones
     } catch (error) {
         console.error("Error al agregar puntuación: ", error);
     }
 }
 
-// Función para obtener puntuaciones
-async function getScores() {
+// Función para obtener puntuaciones y mostrarlas en pantalla
+async function displayScores() {
+    const scoresTable = document.getElementById("scoresTable");
+    if (!scoresTable) {
+        console.error("Tabla de puntuaciones no encontrada");
+        return;
+    }
+    scoresTable.innerHTML = "<tr><th>Jugador</th><th>Puntaje</th></tr>";
+    
     const querySnapshot = await getDocs(collection(db, "scores"));
-    let scores = [];
     querySnapshot.forEach(doc => {
-        scores.push({ id: doc.id, ...doc.data() });
+        let data = doc.data();
+        let row = `<tr><td>${data.player}</td><td>${data.score}</td></tr>`;
+        scoresTable.innerHTML += row;
     });
-    return scores;
 }
 
 // Función para actualizar puntuación
@@ -42,6 +50,7 @@ async function updateScore(id, newScore) {
         const scoreRef = doc(db, "scores", id);
         await updateDoc(scoreRef, { score: newScore });
         console.log("Puntuación actualizada");
+        displayScores();
     } catch (error) {
         console.error("Error al actualizar puntuación: ", error);
     }
@@ -52,10 +61,21 @@ async function deleteScore(id) {
     try {
         await deleteDoc(doc(db, "scores", id));
         console.log("Puntuación eliminada");
+        displayScores();
     } catch (error) {
         console.error("Error al eliminar puntuación: ", error);
     }
 }
 
+// Función para mostrar el formulario de puntuación al perder
+function showScoreForm(finalScore) {
+    const name = prompt("Ingresa tu nombre para guardar tu puntuación:");
+    if (name) {
+        addScore(name, finalScore);
+    }
+}
+
 // Exportamos las funciones
-export { addScore, getScores, updateScore, deleteScore };
+export { addScore, displayScores, updateScore, deleteScore, showScoreForm };
+
+document.addEventListener("DOMContentLoaded", displayScores);
